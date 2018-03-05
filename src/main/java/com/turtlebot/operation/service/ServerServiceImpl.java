@@ -1,4 +1,4 @@
-package com.turtlebot.operation.service.impl;
+package com.turtlebot.operation.service;
 
 import com.turtlebot.operation.dao.ServerDAO;
 import com.turtlebot.operation.dataobject.Server;
