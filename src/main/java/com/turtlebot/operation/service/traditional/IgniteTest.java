@@ -2,21 +2,22 @@ package com.turtlebot.operation.service.traditional;
 
 import com.turtlebot.operation.dataobject.Server;
 import com.turtlebot.operation.dataobject.User;
+import com.turtlebot.operation.service.redis.RedisString;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.Ignition;
 import org.apache.ignite.cache.query.FieldsQueryCursor;
+import org.apache.ignite.cache.query.QueryCursor;
 import org.apache.ignite.cache.query.SqlFieldsQuery;
 import org.apache.ignite.lang.IgniteCallable;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * 描述:
@@ -24,31 +25,57 @@ import java.util.List;
  * @outhor didonglin
  * @create 2018-03-17 22:02
  */
+
 public class IgniteTest {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         IgniteTest igniteTest = new IgniteTest();
+        //igniteTest.userStoreEg();
         igniteTest.helloworld();
         //igniteTest.prepare();
         //igniteTest.insertData();
         //igniteTest.firstcount();
     }
 
+    public void userStoreEg(){
+        Ignition.setClientMode(true);
+        try (Ignite ignite = Ignition.start("src/main/resources/spring/spring-dao.xml")) {
+            try (IgniteCache<Integer, User> cache = ignite.getOrCreateCache("userCache")) {
+                // Load cache with data from the database.
+                cache.loadCache(null);
+                // Execute query on cache.
+                QueryCursor<List<?>> cursor = cache.query(new SqlFieldsQuery("select * from user"));
+                System.out.println(cursor.getAll());
+            }
+        }
+    }
+
+    public void setKV(String key, String value){
+
+    }
+
+    public void setKV(HashMap hashMap){
+
+    }
+
     public void helloworld(){
         try (Ignite ignite = Ignition.start("examples/config/example-ignite.xml")) {
-            // Put values in cache.
-            IgniteCache<Integer, String> cache = ignite.getOrCreateCache("myCache");
+            // 调用ignite方法向cache中创建键值对类型
+            IgniteCache<Integer, String> firstTestcache = ignite.getOrCreateCache("firstTestCache");
 
-            cache.put(1, "Hello");
-            cache.put(2, "World!");
+            // 初始化键值对
+            firstTestcache.put(1, "Hello");
+            firstTestcache.put(2, "World!");
 
-            // Get values from cache and
-            // broadcast 'Hello World' on all the nodes in the cluster.
+            // 从cache中根据键获取值，并且向集群中的所有节点发出广播
             ignite.compute().broadcast(() -> {
-                String hello = cache.get(1);
-                String world = cache.get(2);
+                String s1 = firstTestcache.get(1);
+                String s2 = firstTestcache.get(2);
 
-                System.out.println(hello + " " + world);
+                System.out.println("cache 中的数据：" + s1 + " " + s2);
+
+                //向 redis 中插入数据
+                new RedisString().setStringKV("localhost",s1, s2);
             });
         }
     }

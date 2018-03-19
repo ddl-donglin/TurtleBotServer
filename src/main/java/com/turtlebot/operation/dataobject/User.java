@@ -8,14 +8,32 @@ package com.turtlebot.operation.dataobject;
  */
 public class User {
 
+    private Integer id;
     private String name;
-    private Integer gender;
+    private String gender;
     private Integer age;
     private String description;
+
+
+    public User(Integer id, String name, String gender, Integer age, String description) {
+        this.id = id;
+        this.name = name;
+        this.gender = gender;
+        this.age = age;
+        this.description = description;
+    }
 
     @Override
     public String toString(){
         return "User : " + name + "---" + gender + "---" + age + "---" + description;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getId() {
+         return id;
     }
 
     public String getName() {
@@ -26,11 +44,11 @@ public class User {
         this.name = name;
     }
 
-    public Integer getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(Integer gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
@@ -49,4 +67,5 @@ public class User {
     public void setDescription(String description) {
         this.description = description;
     }
+
 }

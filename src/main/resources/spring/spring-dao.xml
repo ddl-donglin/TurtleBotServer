@@ -28,6 +28,13 @@
 		<property name="acquireRetryAttempts" value="2" />
 	</bean>
 
+	<!--<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+		<property name="url" value="jdbc:mysql://123.206.70.190:3306/turtlebot"></property>
+		<property name="username" value="root"></property>
+		<property name="password" value="753421"></property>
+	</bean>-->
+
 	<!-- 3.配置SqlSessionFactory对象 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<!-- 注入数据库连接池 -->
@@ -46,5 +53,47 @@
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 		<!-- 给出需要扫描Dao接口包 -->
 		<property name="basePackage" value="com.turtlebot.operation.dao" />
+	</bean>
+
+
+	<!-- ignite 配置，从持久化存储中读取数据-->
+	<bean class="org.apache.ignite.configuration.IgniteConfiguration" id="ignite.cfg">
+		<property name="cacheConfiguration">
+			<list>
+				<bean class="org.apache.ignite.configuration.CacheConfiguration">
+					<property name="name" value="userCache"></property>
+					<!-- Enable readThrough-->
+					<property name="readThrough" value="true"></property>
+					<property name="writeThrough" value="true"></property>
+					<!-- Set cacheStoreFactory-->
+					<property name="cacheStoreFactory">
+						<bean class="javax.cache.configuration.FactoryBuilder" factory-method="factoryOf">
+							<constructor-arg value="com.turtlebot.operation.service.traditional.UserStoreTest"></constructor-arg>
+						</bean>
+					</property>
+					<property name="queryEntities">
+						<list>
+							<bean class="org.apache.ignite.cache.QueryEntity">
+								<property name="keyType" value="java.lang.Integer"></property>
+								<property name="valueType" value="com.turtlebot.operation.dataobject.User"></property>
+								<property name="fields">
+									<map>
+										<entry key="id" value="java.lang.Integer"></entry>
+										<entry key="name" value="java.lang.String"></entry>
+										<entry key="gender" value="java.lang.String"></entry>
+										<entry key="age" value="java.lang.Integer"></entry>
+										<entry key="description" value="java.lang.String"></entry>
+									</map>
+								</property>
+							</bean>
+						</list>
+					</property>
+				</bean>
+			</list>
+		</property>
+		<property name="peerClassLoadingEnabled" value="true"></property>
+
+		<!-- Other Ignite configurations-->
+
 	</bean>
 </beans>
