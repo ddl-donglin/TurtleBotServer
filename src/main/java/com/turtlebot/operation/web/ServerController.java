@@ -1,7 +1,7 @@
 package com.turtlebot.operation.web;
 
 import com.turtlebot.operation.dataobject.Server;
-import com.turtlebot.operation.service.ServerService;
+import com.turtlebot.operation.service.server.ServerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;

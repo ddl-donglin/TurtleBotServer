@@ -1,4 +1,4 @@
-package com.turtlebot.operation.service;
+package com.turtlebot.operation.service.server;
 
 import com.turtlebot.operation.dataobject.Server;
 

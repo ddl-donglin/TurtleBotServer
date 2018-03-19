@@ -1,8 +1,7 @@
-package com.turtlebot.operation.service;
+package com.turtlebot.operation.service.server;
 
 import com.turtlebot.operation.dao.ServerDAO;
 import com.turtlebot.operation.dataobject.Server;
-import com.turtlebot.operation.service.ServerService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
