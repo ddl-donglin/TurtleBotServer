@@ -1,19 +1,12 @@
-package com.turtlebot.operation.service.redis;
+package com.turtlebot.operation.dataobject;
 
-import redis.clients.jedis.Jedis;
+import com.turtlebot.operation.service.redis.RedisServer;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-/**
- * 描述:
- *
- * @outhor didonglin
- * @create 2018-03-19 16:57
- */
-public class RedisServer {
+public class Redis {
 
     private static String redisIP;
 
@@ -36,19 +29,4 @@ public class RedisServer {
         this.redisIP = redisIP;
     }
 
-
-
-    public void redisStartTest() {
-
-        //连接本地的 Redis 服务
-        //System.out.println(this.getRedisIP());
-        Jedis jedis = new Jedis(this.getRedisIP());
-        System.out.println("连接成功");
-        //查看服务是否运行
-        System.out.println("服务正在运行: "+jedis.ping());
-    }
-
-    public static void main(String[] args) {
-        new RedisServer().redisStartTest();
-    }
 }

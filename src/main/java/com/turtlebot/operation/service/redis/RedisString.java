@@ -27,6 +27,6 @@ public class RedisString {
     }
 
     public static void main(String[] args) {
-        new RedisString().setStringKV("localhost","testkeyfromjava001", "testvaluefromjava001");
+        new RedisString().setStringKV("192.168.223.10","testkeyfromjava002", "testvaluefromjava002");
     }
 }
