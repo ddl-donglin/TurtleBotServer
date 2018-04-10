@@ -21,7 +21,7 @@ public class Redis {
         }
     }
 
-    public String getRedisIP() {
+    public static String getRedisIP() {
         return redisIP;
     }
 
