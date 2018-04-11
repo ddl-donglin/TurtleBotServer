@@ -1,2 +1,1 @@
-修改包名时，需要修改spring配置
-修改项目名时，需要删除.idea目录下的xml文件
+Turtlebot后端程序
