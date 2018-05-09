@@ -75,7 +75,7 @@ public class IgniteTest {
                 System.out.println("cache 中的数据：" + s1 + " " + s2);
 
                 //向 redis 中插入数据
-                new RedisString().setStringKV("192.168.223.10",s1, s2);
+                new RedisString().setStringKV("127.0.0.1",s1, s2);
             });
         }
     }

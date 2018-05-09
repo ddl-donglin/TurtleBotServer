@@ -30,6 +30,6 @@ public class RedisString {
     }
 
     public static void main(String[] args) {
-        //new RedisString().setStringKV("192.168.223.10","testkeyfromjava002", "testvaluefromjava002");
+        new RedisString().setStringKV("127.0.0.1","testkeyfromjava002", "testvaluefromjava002");
     }
 }
