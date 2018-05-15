@@ -48,7 +48,6 @@ public class IgniteTest {
             String value = sc.nextLine();
             if (key.equals("88") && value.equals("88"))
                 break;
-            System.out.println(Integer.parseInt(key));
             igniteTest.setKV(Integer.parseInt(key), value);
         }
 
