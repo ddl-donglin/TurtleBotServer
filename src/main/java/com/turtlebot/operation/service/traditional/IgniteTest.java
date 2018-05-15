@@ -2,7 +2,6 @@ package com.turtlebot.operation.service.traditional;
 
 import com.turtlebot.operation.dataobject.Server;
 import com.turtlebot.operation.dataobject.User;
-import com.turtlebot.operation.service.redis.RedisString;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.Ignition;
@@ -10,14 +9,13 @@ import org.apache.ignite.cache.query.FieldsQueryCursor;
 import org.apache.ignite.cache.query.QueryCursor;
 import org.apache.ignite.cache.query.SqlFieldsQuery;
 import org.apache.ignite.lang.IgniteCallable;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Resource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * 描述:
@@ -28,13 +26,41 @@ import java.util.*;
 
 public class IgniteTest {
 
+    private IgniteCache<Integer, String> firstTestcache;
+    private Ignite ignite = Ignition.start("examples/config/example-ignite.xml");
+
+    public IgniteTest() {
+        // 调用ignite方法向cache中创建键值对类型
+        firstTestcache = ignite.getOrCreateCache("firstTestCache");
+    }
+
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         IgniteTest igniteTest = new IgniteTest();
         //igniteTest.userStoreEg();
-        igniteTest.helloworld();
         //igniteTest.prepare();
         //igniteTest.insertData();
         //igniteTest.firstcount();
+
+        System.out.println("开始输入KV！");
+        while (true) {
+            Scanner sc = new Scanner(System.in);
+            String key = sc.nextLine();
+            String value = sc.nextLine();
+            if (key.equals("88") && value.equals("88"))
+                break;
+            System.out.println(Integer.parseInt(key));
+            igniteTest.setKV(Integer.parseInt(key), value);
+        }
+
+        System.out.println("开始获取了KV");
+
+        while (true) {
+            Scanner sc = new Scanner(System.in);
+            Integer getkey = sc.nextInt();
+            if (getkey == 88)
+                break;
+            System.out.println(igniteTest.getKV(getkey));
+        }
     }
 
     public void userStoreEg(){
@@ -50,34 +76,31 @@ public class IgniteTest {
         }
     }
 
-    public void setKV(String key, String value){
-
-    }
-
     public void setKV(HashMap hashMap){
 
     }
 
-    public void helloworld(){
-        try (Ignite ignite = Ignition.start("examples/config/example-ignite.xml")) {
-            // 调用ignite方法向cache中创建键值对类型
-            IgniteCache<Integer, String> firstTestcache = ignite.getOrCreateCache("firstTestCache");
+    public void setKV(Integer key, String value){
+        // 初始化键值对
+        firstTestcache.put(key, value);
+    }
 
-            // 初始化键值对
-            firstTestcache.put(1, "Hello");
-            firstTestcache.put(2, "World!");
+    public String getKV(Integer key){
+        // 从cache中根据键获取值，并且向集群中的所有节点发出广播
+        final String[] res = new String[1];
+        ignite.compute().broadcast(() -> {
+            res[0] = "cache 中的数据：" + key + " --> " + firstTestcache.get(key);
 
-            // 从cache中根据键获取值，并且向集群中的所有节点发出广播
-            ignite.compute().broadcast(() -> {
-                String s1 = firstTestcache.get(1);
-                String s2 = firstTestcache.get(2);
+            //向 redis 中插入数据
+            // new RedisString().setStringKV("127.0.0.1",s1, s2);
+        });
 
-                System.out.println("cache 中的数据：" + s1 + " " + s2);
-
-                //向 redis 中插入数据
-                new RedisString().setStringKV("127.0.0.1",s1, s2);
-            });
-        }
+        // 从集群cache中获取数据
+        HashSet keySets = new HashSet();
+        keySets.add(1);
+        keySets.add(2);
+        Map cacheMap = firstTestcache.getAll(keySets);
+        return res[0];
     }
 
     public void prepare() throws ClassNotFoundException, SQLException {
