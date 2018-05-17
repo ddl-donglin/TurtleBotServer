@@ -21,6 +21,8 @@
 		(1)加入对静态资源的处理：js,gif,png
 		(2)允许使用"/"做整体映射
 	 -->
+	<mvc:resources mapping="/files/images/*" location="/files/images/"/>
+	
 	 <mvc:default-servlet-handler/>
 
 	 <!-- 3.配置jsp 显示ViewResolver -->
