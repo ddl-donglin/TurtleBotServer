@@ -19,7 +19,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   
   <body>
     上传配件图片：<br/>
-    <form action="/upload/image" method="post"
+    <form action="/upload/imageFile" method="post"
     enctype="multipart/form-data">
     	image:<input type="file" name="image" value="" /><br/>
         filename:<input type="text" name="wantedFilename" value="" /><br/>

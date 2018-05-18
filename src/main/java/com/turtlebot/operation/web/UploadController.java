@@ -22,11 +22,16 @@ import java.io.IOException;
 @RequestMapping("/upload")
 public class UploadController {
 
+    @RequestMapping(value = "/index",method = RequestMethod.GET)
+    public String getServerList()throws Exception{
+        return "index";
+    }
+
     @RequestMapping(value = "/imageFile",method = RequestMethod.POST)
     @ResponseBody
     public void uploadImageFile(ImageFileModel imageFileModel, HttpServletRequest request, HttpServletResponse response) throws IOException{
         // 生成存储路径
-        String storeDirectory = request.getSession().getServletContext().getRealPath("/WEB-INF/files/images");
+        String storeDirectory = request.getSession().getServletContext().getRealPath("/files/images");
         File file = new File(storeDirectory);
         if (!file.exists()) {
             boolean flag = file.mkdir();
@@ -34,7 +39,7 @@ public class UploadController {
         }
         MultipartFile imageFile = imageFileModel.getImage();
         String wantedFilename = imageFileModel.getWantedFilename();
-//        if (wantedFilename == null || wantedFilename.equals(""))
+        if (wantedFilename == null || wantedFilename.equals(""))
             wantedFilename = imageFile.getOriginalFilename();
         File saveFile = new File(storeDirectory, wantedFilename);
 //        if (!saveFile.exists())
@@ -52,5 +57,7 @@ public class UploadController {
         }
         response.getWriter().print(result);
     }
+
+
 
 }
