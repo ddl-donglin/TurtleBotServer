@@ -47,11 +47,7 @@ public class UploadController {
         System.out.println("save as filename: " + wantedFilename);
         String result = saveFile.getAbsolutePath();
         try {
-            if (imageFile != null){
-                imageFile.transferTo(saveFile);
-            }else{
-                System.out.println("image file is null");
-            }
+            imageFile.transferTo(saveFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
