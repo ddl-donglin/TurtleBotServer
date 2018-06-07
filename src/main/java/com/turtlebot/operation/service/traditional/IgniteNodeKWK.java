@@ -17,7 +17,7 @@ import java.sql.Statement;
 import java.util.*;
 
 public class IgniteNodeKWK {
-    private IgniteCache<Integer, String> firstTestcache;
+    private IgniteCache<String, String> firstTestcache;
     private Ignite ignite;
     private UUID nodeID;
 
@@ -40,25 +40,40 @@ public class IgniteNodeKWK {
         //igniteTest.firstcount();
         System.out.println("ignite node kwk's uuid is " + igniteNodeKWK.getNodeID());
 
-        System.out.println("开始输入KV！");
+        System.out.print("开始输入KV，输入88退出。\ninput>");
         while (true) {
             Scanner sc = new Scanner(System.in);
-            String key = sc.nextLine();
-            String value = sc.nextLine();
-            if (key.equals("88") && value.equals("88"))
+            String kv = sc.nextLine();
+            if (kv.equals("88")){
+                System.out.println("input key value finish.");
                 break;
-            igniteNodeKWK.setKV(Integer.parseInt(key), value);
+            }else{
+                String[] token = kv.split(" ");
+                if (token.length == 2){
+                    igniteNodeKWK.setKV(token[0], token[1]);
+                    System.out.println("successfully set key: " + token[0] + ", value: " + token[1]);
+                    System.out.print("input>");
+                }else{
+                    System.out.print("invalid input. example: key1 value1\ninput>");
+                    continue;
+                }
+            }
         }
 
-        System.out.println("开始获取了KV");
+        System.out.print("开始获取了KV，输入88退出。\ninput>");
 
         while (true) {
             Scanner sc = new Scanner(System.in);
-            Integer getkey = sc.nextInt();
-            if (getkey == 88)
+            String getkey = sc.nextLine();
+            if (getkey.equals("88")){
                 break;
-            System.out.println(igniteNodeKWK.getKV(getkey));
+            }else{
+                System.out.println(igniteNodeKWK.getKV(getkey));
+                System.out.print("input>");
+                continue;
+            }
         }
+        System.out.println("Do not get any key. Program finishes.");
     }
 
     public void userStoreEg(){
@@ -78,12 +93,12 @@ public class IgniteNodeKWK {
 
     }
 
-    public void setKV(Integer key, String value){
+    public void setKV(String key, String value){
         // 初始化键值对
         firstTestcache.put(key, value);
     }
 
-    public String getKV(Integer key){
+    public String getKV(String key){
         // 从cache中根据键获取值，并且向集群中的所有节点发出广播
         final String[] res = new String[1];
         ignite.compute().broadcast(() -> {
