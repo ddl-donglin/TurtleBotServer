@@ -12,6 +12,7 @@ import java.util.Date;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+/*
 @Component
 public class BTaskImpl implements IBTask{
     @Scheduled(cron="0/5 * * * * ? ")   //每5秒执行一次
@@ -20,4 +21,4 @@ public class BTaskImpl implements IBTask{
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         System.out.println(sdf.format(new Date())+"*********B任务每5秒执行一次进入测试");
     }
-}
+}*/

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.turtlebot.operation.dao.IndentDAO">
+    <select id="getIndentList" resultType="com.turtlebot.operation.dataobject.Indent">
+        SELECT *  FROM indent
+    </select>
+
+    <select id="getNeedRecvIndents" resultType="com.turtlebot.operation.dataobject.Indent">
+        select * from indent where isSend = 0
+    </select>
+
+    <update id="sendIndent">
+        update indent set isSend = 1 where orderId = #{orderId}
+    </update>
+</mapper>
