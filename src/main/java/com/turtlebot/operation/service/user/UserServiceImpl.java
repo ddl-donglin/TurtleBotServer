@@ -2,6 +2,7 @@ package com.turtlebot.operation.service.user;
 
 import com.turtlebot.operation.dao.UserDAO;
 import com.turtlebot.operation.dataobject.User;
+import com.turtlebot.operation.dataobject.Users;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -36,6 +37,11 @@ public class UserServiceImpl implements UserService{
     public List<User> getUserList() {
         List<User> users=userDAO.getUserList();
         return users;
+    }
+
+    @Override
+    public boolean registUser(Users users) {
+        return userDAO.registUser(users);
     }
 
 }

@@ -25,4 +25,9 @@ public class UserController {
         return "UserList";
     }
 
+    @RequestMapping(value = "/registUser",method = RequestMethod.GET)
+    public String registUser(ModelMap modelMap){
+        return "index";
+    }
+
 }
