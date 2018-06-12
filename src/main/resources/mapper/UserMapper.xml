@@ -4,4 +4,5 @@
     <select id="getUserList" resultType="com.turtlebot.operation.dataobject.User">
         SELECT *  FROM `user`
     </select>
+
 </mapper>
