@@ -18,7 +18,7 @@ public class TrolleyServiceImpl implements TrolleyService {
     private String user = "turtlebot";
     private Integer port = 22;
     private String psw = "1012";
-    private String command = "python /helloworld/turtlebot/go_to_specific_point_on_map.py " + x + " " + y;
+    private String command = "python /home/turtlebot/helloworld/turtlebot/go_to_specific_point_on_map.py " + x + " " + y;
 
     @Override
     public Integer orderDispatch(Indent indent) {
@@ -26,5 +26,9 @@ public class TrolleyServiceImpl implements TrolleyService {
         String res = new SSHshell(host,user,psw,port,command).exec();
         System.out.println(res);
         return 1;
+    }
+
+    public static void main(String[] args) {
+        new TrolleyServiceImpl().orderDispatch(null);
     }
 }
