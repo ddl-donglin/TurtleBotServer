@@ -77,8 +77,8 @@ def create_graph():
 if __name__ == "__main__":
     image = sys.argv[1]
 
-    print("image")
-    print(image)
+    print("image ")
+    print(image + " ")
 
     # 读取图片
     image_data = tf.gfile.FastGFile(image, 'rb').read()
