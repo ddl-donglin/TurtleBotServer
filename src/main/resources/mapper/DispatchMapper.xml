@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.turtlebot.operation.dao.DispatchDAO">
+    <insert id="addDispatch" parameterType="com.turtlebot.operation.dataobject.Dispatch">
+        insert into dispatch (itemId, trolleyId, gmt_update, is_finish) values (#{itemId}, #{trolleyId}, NOW(), #{isFinish});
+    </insert>
+
+    <update id="updateDispatch" parameterType="com.turtlebot.operation.dataobject.Dispatch">
+        UPDATE dispatch SET gmt_update = NOW(), is_finish = #{isFinish}
+    </update>
+
+</mapper>

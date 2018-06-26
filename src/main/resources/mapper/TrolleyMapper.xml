@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.turtlebot.operation.dao.TrolleyDAO">
+    <select id="getAllActiveAndRemainTrolleys" resultType="com.turtlebot.operation.dataobject.Trolley">
+        SELECT *  FROM trolley WHERE is_active = 1 AND remain_capacity > 0
+    </select>
+    <select id="getTrolleyById" resultType="com.turtlebot.operation.dataobject.Trolley">
+        SELECT *  FROM trolley WHERE id = #{id}
+    </select>
+
+    <update id="updateTrolley" parameterType="com.turtlebot.operation.dataobject.Trolley">
+        UPDATE trolley SET gmt_update = NOW(), remain_capacity = #{remainCapacity}, x_axis = #{xAxis}, y_axis = #{yAxis}, is_active = #{isActive}
+         WHERE id = #{id}
+    </update>
+
+</mapper>
