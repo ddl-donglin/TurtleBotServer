@@ -4,6 +4,8 @@ import com.turtlebot.operation.dataobject.Indent;
 import com.turtlebot.operation.utils.SSHshell;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+
 /**
  * @Auther: davidddl
  * @Date: 2018/6/12 15:24
@@ -27,6 +29,17 @@ public class TrolleyServiceImpl implements TrolleyService {
         System.out.println(res);
         return 1;
     }
+
+    @Override
+    public HashMap<Float, Float> getTrolleyLocation(Integer trolleyId) {
+        return null;
+    }
+
+    @Override
+    public HashMap<Float, Float> getGoodsLocation(Integer goodsId) {
+        return null;
+    }
+
 
     public static void main(String[] args) {
         new TrolleyServiceImpl().orderDispatch(null);
