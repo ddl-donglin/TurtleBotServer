@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * @Auther: davidddl
+ * @Auther: kewenkang
  * @Date: 2018/6/12 15:24
  * @Description:
  */
@@ -26,6 +26,7 @@ public class TrolleyServiceImpl implements TrolleyService {
     private Integer port = 22;
     private String psw = "1012";
     private String command = "python /home/turtlebot/helloworld/turtlebot/go_to_specific_point_on_map.py " + x + " " + y;
+    private String command2 = "python /home/turtlebot/helloworld/turtlebot/get_trolley_location_on_map.py";
 
     @Autowired
     TrolleyDAO trolleyDAO;
@@ -59,6 +60,12 @@ public class TrolleyServiceImpl implements TrolleyService {
         return orderItems;
     }
 
+    /**
+     *
+     * @param location: location of goods
+     * @param trolley: location of trolley
+     * @return distance between goods and trolley
+     */
     public Double getDistance(Location location, Trolley trolley){
         Float xDiff = location.getGoodsXAxis() - trolley.getxAxis();
         Float yDiff = location.getGoodsYAxis() - trolley.getyAxis();
@@ -68,20 +75,24 @@ public class TrolleyServiceImpl implements TrolleyService {
 
     @Override
     public void bestDispatch(){
+        //get all avaliable trolleys
         List<Trolley> avaliableTrolleys = trolleyDAO.getAllActiveAndRemainTrolleys();
+        //get not sent orderitems
         List<OrderItem> orderItems = getUnsentOrderItem();
+        List<Dispatch> dispatches = new ArrayList<>();
 
-        //print
+        //print trolleys
         for (Trolley trolley: avaliableTrolleys){
             System.out.println(trolley.getName() + "'s coordinate: ("+ trolley.getxAxis() +", " + trolley.getyAxis() + "), current capacity: " + trolley.getRemainCapacity());
         }
 
         for (OrderItem orderItem: orderItems){
 
-
             List<Trolley> updatedTrolleys = new ArrayList<>();
 
+            //get goods's location
             Location location = locationDAO.getLocationByGoods(orderItem.getGoodsid());
+            //print orderitem
             System.out.println("\norderItem's coordinate: ("+ location.getGoodsXAxis() +", " + location.getGoodsYAxis() + ")");
             Double distance = Double.MAX_VALUE;
             Trolley trolleySelected = null;
@@ -90,6 +101,7 @@ public class TrolleyServiceImpl implements TrolleyService {
                     continue;
                 Double curDistance = getDistance(location, trolley);
                 if (curDistance < distance){
+                    //record nearest trolley and distance
                     trolleySelected = trolley;
                     distance = curDistance;
                 }
@@ -100,7 +112,10 @@ public class TrolleyServiceImpl implements TrolleyService {
                 dispatch.setItemId(orderItem.getItemid());
                 dispatch.setIsFinish(0);
                 dispatch.setTrolleyId(trolleySelected.getId());
+                dispatches.add(dispatch);
+                //update trolley's capacity
                 trolleySelected.setRemainCapacity(trolleySelected.getRemainCapacity() - 1);
+                //print
                 System.out.println("------------ Dispatching -----------\nassign trolley: " + trolleySelected.getName() + " to get orderItem: "
                         + orderItem.getItemid() + ", goodsId: " + orderItem.getGoodsid() + ".");
 
@@ -112,6 +127,7 @@ public class TrolleyServiceImpl implements TrolleyService {
                         updatedTrolleys.add(trolley);
                     }
                 }
+                //update avaliable trolleys
                 avaliableTrolleys = updatedTrolleys;
 
                 //print
@@ -121,9 +137,35 @@ public class TrolleyServiceImpl implements TrolleyService {
             }else{
                 System.out.println("No avaliable trolley at present.");
             }
-
-
         }
+
+        //wirte dispatch into database
+        for (Dispatch dispatch: dispatches){
+            dispatchDAO.addDispatch(dispatch);
+            //System.out.println(dispatch);
+        }
+
+        //update trolleys
+        for (Trolley trolley: avaliableTrolleys){
+            trolleyDAO.updateTrolley(trolley);
+            //System.out.println(trolley);
+        }
+    }
+
+    @Override
+    public boolean updateTrolleyLocation(Trolley trolley) {
+        String res = new SSHshell(host,user,psw,port,command2).exec();
+        System.out.println(res);
+        //parse result
+        String[] splited = res.split(";");
+        for (String line: splited){
+            String[] fields = line.split(" ");
+            Trolley trolley1 = trolleyDAO.getTrolleyById(Integer.valueOf(fields[0].trim()));
+            trolley1.setxAxis(Float.valueOf(fields[1]));
+            trolley1.setyAxis(Float.valueOf(fields[2]));
+            trolleyDAO.updateTrolley(trolley1);
+        }
+        return false;
     }
 
     public static void main(String[] args) {
