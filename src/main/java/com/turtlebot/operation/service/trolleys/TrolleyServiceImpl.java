@@ -2,10 +2,12 @@ package com.turtlebot.operation.service.trolleys;
 
 import com.turtlebot.operation.dao.*;
 import com.turtlebot.operation.dataobject.*;
+import com.turtlebot.operation.service.traditional.IgniteTest;
 import com.turtlebot.operation.utils.SSHshell;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,8 +44,13 @@ public class TrolleyServiceImpl implements TrolleyService {
     @Override
     public Integer orderDispatch(Indent indent) {
 
-        String res = new SSHshell(host,user,psw,port,command).exec();
-        System.out.println(res);
+        /*String res = new SSHshell(host,user,psw,port,command).exec();
+        System.out.println(res);*/
+
+        Location goodsLocation = locationDAO.getLocationByGoods(indent.getOrderId());
+        System.out.println(goodsLocation);
+        System.out.println(getDistance(goodsLocation, null));
+
         return 1;
     }
 
@@ -67,9 +74,12 @@ public class TrolleyServiceImpl implements TrolleyService {
      * @return distance between goods and trolley
      */
     public Double getDistance(Location location, Trolley trolley){
-        Float xDiff = location.getGoodsXAxis() - trolley.getxAxis();
-        Float yDiff = location.getGoodsYAxis() - trolley.getyAxis();
-
+//        Float xDiff = location.getGoodsXAxis() - trolley.getxAxis();
+//        Float yDiff = location.getGoodsYAxis() - trolley.getyAxis();
+        IgniteTest igniteTest = new IgniteTest();
+        Float xDiff = location.getGoodsXAxis() - Float.valueOf(igniteTest.getKV(001));
+        Float yDiff = location.getGoodsYAxis() - Float.valueOf(igniteTest.getKV(002));
+        System.out.println("X:"+xDiff + "   Y:" + yDiff);
         return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
     }
 
@@ -168,7 +178,10 @@ public class TrolleyServiceImpl implements TrolleyService {
         return false;
     }
 
-    public static void main(String[] args) {
-        new TrolleyServiceImpl().bestDispatch();
-    }
+    /*public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        //new TrolleyServiceImpl().bestDispatch();
+        IgniteTest igniteTest = new IgniteTest();
+        igniteTest.setKV(1,"caonima,shabi");
+        igniteTest.setKV(2,"rinimahai");
+    }*/
 }

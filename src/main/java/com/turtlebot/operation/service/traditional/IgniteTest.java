@@ -34,7 +34,8 @@ public class IgniteTest {
         firstTestcache = ignite.getOrCreateCache("firstTestCache");
     }
 
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+    //public void setAndGet() throws SQLException, ClassNotFoundException {
+    public static void main(String[] args) {
         IgniteTest igniteTest = new IgniteTest();
         //igniteTest.userStoreEg();
         //igniteTest.prepare();
