@@ -6,11 +6,8 @@ import re
 import os
 import sys
 
-model_dir = '/Users/davidddl/IdeaProjects/TurtleBotServer/model/'
-image = sys.argv[1]
+model_dir = 'D:/workspace/IdeaProjects/TurtleBotServer/model/'
 
-print("image")
-print(image)
 
 
 # 将类别ID转换为人类易读的标签
@@ -77,26 +74,32 @@ def create_graph():
         tf.import_graph_def(graph_def, name='')
 
 
-# 读取图片
-image_data = tf.gfile.FastGFile(image, 'rb').read()
+if __name__ == "__main__":
+    image = sys.argv[1]
 
-# 创建graph
-create_graph()
+    print("image ")
+    print(image + " ")
 
-sess = tf.Session()
-# Inception-v3模型的最后一层softmax的输出
-softmax_tensor = sess.graph.get_tensor_by_name('softmax:0')
-# 输入图像数据，得到softmax概率值（一个shape=(1,1008)的向量）
-predictions = sess.run(softmax_tensor, {'DecodeJpeg/contents:0': image_data})
-# (1,1008)->(1008,)
-predictions = np.squeeze(predictions)
+    # 读取图片
+    image_data = tf.gfile.FastGFile(image, 'rb').read()
 
-# ID --> English string label.
-node_lookup = NodeLookup()
-# 概率最大的值（top-5)
-top = predictions.argsort()[-1:][::-1]
-for node_id in top:
-    human_string = node_lookup.id_to_string(node_id)
-    print('%s' % human_string)
+    # 创建graph
+    create_graph()
 
-sess.close()
+    sess = tf.Session()
+    # Inception-v3模型的最后一层softmax的输出
+    softmax_tensor = sess.graph.get_tensor_by_name('softmax:0')
+    # 输入图像数据，得到softmax概率值（一个shape=(1,1008)的向量）
+    predictions = sess.run(softmax_tensor, {'DecodeJpeg/contents:0': image_data})
+    # (1,1008)->(1008,)
+    predictions = np.squeeze(predictions)
+
+    # ID --> English string label.
+    node_lookup = NodeLookup()
+    # 概率最大的值（top-5)
+    top = predictions.argsort()[-1:][::-1]
+    for node_id in top:
+        human_string = node_lookup.id_to_string(node_id)
+        print('%s' % human_string)
+
+    sess.close()

@@ -1,6 +1,7 @@
 package com.turtlebot.operation.dataobject;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Auther: davidddl
@@ -18,6 +19,15 @@ public class Indent {
     private Integer isReceive;
     private Integer isComplete;
     private Integer addressId;
+    private List<Goods> goodsInfo;
+
+    public List<Goods> getGoodsInfo() {
+        return goodsInfo;
+    }
+
+    public void setGoodsInfo(List<Goods> goodsInfo) {
+        this.goodsInfo = goodsInfo;
+    }
 
     @Override
     public String toString() {
