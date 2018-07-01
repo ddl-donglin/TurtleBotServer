@@ -29,6 +29,8 @@ public class TrolleyServiceImpl implements TrolleyService {
     private String psw = "1012";
     private String command = "python /home/turtlebot/helloworld/turtlebot/go_to_specific_point_on_map.py " + x + " " + y;
     private String command2 = "python /home/turtlebot/helloworld/turtlebot/get_trolley_location_on_map.py";
+    private String command3 = "rostopic echo /odom | sed -n '11,12p'";
+
 
     @Autowired
     TrolleyDAO trolleyDAO;
@@ -44,12 +46,12 @@ public class TrolleyServiceImpl implements TrolleyService {
     @Override
     public Integer orderDispatch(Indent indent) {
 
-        /*String res = new SSHshell(host,user,psw,port,command).exec();
-        System.out.println(res);*/
+        String res = new SSHshell(host,user,psw,port,command3).exec();
+        System.out.println(res);
 
-        Location goodsLocation = locationDAO.getLocationByGoods(indent.getOrderId());
-        System.out.println(goodsLocation);
-        System.out.println(getDistance(goodsLocation, null));
+//        Location goodsLocation = locationDAO.getLocationByGoods(indent.getOrderId());
+//        System.out.println(goodsLocation);
+//        System.out.println(getDistance(goodsLocation, null));
 
         return 1;
     }
@@ -178,10 +180,10 @@ public class TrolleyServiceImpl implements TrolleyService {
         return false;
     }
 
-    /*public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        //new TrolleyServiceImpl().bestDispatch();
-        IgniteTest igniteTest = new IgniteTest();
-        igniteTest.setKV(1,"caonima,shabi");
-        igniteTest.setKV(2,"rinimahai");
-    }*/
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        new TrolleyServiceImpl().orderDispatch(null);
+//        IgniteTest igniteTest = new IgniteTest();
+//        igniteTest.setKV(1,"caonima,shabi");
+//        igniteTest.setKV(2,"rinimahai");
+    }
 }
