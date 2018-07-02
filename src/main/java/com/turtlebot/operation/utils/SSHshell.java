@@ -61,7 +61,7 @@ public class SSHshell {
 
     public Session getSession(){
 
-        Session session =null;
+        Session session;
         try {
             JSch jsch=new JSch();
 

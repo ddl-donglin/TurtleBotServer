@@ -46,7 +46,7 @@ public class TrolleyServiceImpl implements TrolleyService {
     @Override
     public Integer orderDispatch(Indent indent) {
 
-        String res = new SSHshell(host,user,psw,port,command3).exec();
+        String res = new SSHshell(host,user,psw,port,"rostopic").exec();
         System.out.println(res);
 
 //        Location goodsLocation = locationDAO.getLocationByGoods(indent.getOrderId());

@@ -1,0 +1,36 @@
+Welcome to Ubuntu 14.04.5 LTS (GNU/Linux 3.16.0-30-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com/
+
+96 packages can be updated.
+28 updates are security updates.
+
+New release '16.04.4 LTS' available.
+Run 'do-release-upgrade' to upgrade to it.
+
+Last login: Mon Jul  2 21:36:50 2018 from davidddldembp.lan
+ls
+Welcome to Ubuntu 14.04.5 LTS (GNU/Linux 3.16.0-30-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com/
+
+96 packages can be updated.
+28 updates are security updates.
+
+New release '16.04.4 LTS' available.
+Run 'do-release-upgrade' to upgrade to it.
+
+Last login: Mon Jul  2 21:37:45 2018 from davidddldembp.lan
+rostopic echo /odom | sed -n '11,12p'
+Welcome to Ubuntu 14.04.5 LTS (GNU/Linux 3.16.0-30-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com/
+
+96 packages can be updated.
+28 updates are security updates.
+
+New release '16.04.4 LTS' available.
+Run 'do-release-upgrade' to upgrade to it.
+
+Last login: Mon Jul  2 21:38:34 2018 from davidddldembp.lan
+rostopic echo /odom | sed -n '11,12p'
